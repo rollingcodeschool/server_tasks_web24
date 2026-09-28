@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Task from "../models/task.js";
 
 const getTasks = async (req, res) => {
@@ -22,15 +21,44 @@ const postTask = async (req, res) => {
   });
 };
 
-const putTask = (req, res) => {
-  res.json({
-    msg: "PUT de Router",
+//Actualizar una tarea
+const putTask = async (req, res) => {
+  const { id } = req.params;
+
+  const tarea = await Task.findById(id);
+
+  // const completada = await Task.findByIdAndUpdate(id, { completed: true });
+
+  if (!tarea) {
+    return res.status(404).json({
+      msg: "Tarea no encontrada",
+    });
+  }
+
+  tarea.completed = !tarea.completed;
+
+  await tarea.save();
+
+  return res.status(200).json({
+    msg: "Tarea actualizada",
+    completada,
   });
 };
 
-const deleteTask = (req, res) => {
-  res.json({
-    msg: "DELETE de Router",
+const deleteTask = async (req, res) => {
+  const { id } = req.params;
+  const tarea = await Task.findById(id);
+
+  if (!tarea) {
+    return res.status(404).json({
+      msg: "Tarea no encontrada",
+    });
+  }
+
+  await Task.findByIdAndDelete(id);
+
+  return res.status(200).json({
+    msg: "Tarea eliminada",
   });
 };
 
