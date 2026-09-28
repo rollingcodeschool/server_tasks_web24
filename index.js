@@ -12,6 +12,7 @@
 
 //Express
 import express from "express";
+import cors from "cors";
 import { dbConnect } from "./config/database.js";
 import taskRouter from "./routes/taskRoutes.js";
 
@@ -21,6 +22,7 @@ const port = 4500;
 //middleware -> función que está entre la req y la res
 app.use(express.json());
 app.use(express.static("public")); //configuramos la carpeta public para nuestras páginas web
+app.use(cors());
 
 await dbConnect();
 
